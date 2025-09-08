@@ -1,0 +1,28 @@
+# Node.js
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Env files
+.env
+.env.*
+
+# Docker volumes/data
+db_data/
+data/photos/
+
+# Build artifacts
+frontend/dist/
+frontend/.vite/
+backend/.venv/
+
+# IDE/Editor
+.vscode/
+.idea/
+.DS_Store

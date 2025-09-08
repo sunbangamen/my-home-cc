@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: home
+      POSTGRES_PASSWORD: homepw
+      POSTGRES_DB: homepg
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U home -d homepg"]
+      interval: 3s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/app
+      - photos_data:/data/photos
+    ports: ["8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  photos_data:
