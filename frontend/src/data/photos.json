@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "filename": "family_trip_1.jpg",
+    "title": "가족 여행",
+    "uploaded_at": "2024-09-01",
+    "thumbnail": "https://picsum.photos/300/200?random=1"
+  },
+  {
+    "id": 2,
+    "filename": "birthday_party.jpg",
+    "title": "생일 파티",
+    "uploaded_at": "2024-09-05",
+    "thumbnail": "https://picsum.photos/300/200?random=2"
+  },
+  {
+    "id": 3,
+    "filename": "weekend_picnic.jpg",
+    "title": "주말 피크닉",
+    "uploaded_at": "2024-09-08",
+    "thumbnail": "https://picsum.photos/300/200?random=3"
+  },
+  {
+    "id": 4,
+    "filename": "cooking_together.jpg",
+    "title": "함께 요리하기",
+    "uploaded_at": "2024-09-10",
+    "thumbnail": "https://picsum.photos/300/200?random=4"
+  },
+  {
+    "id": 5,
+    "filename": "garden_work.jpg",
+    "title": "정원 가꾸기",
+    "uploaded_at": "2024-09-12",
+    "thumbnail": "https://picsum.photos/300/200?random=5"
+  },
+  {
+    "id": 6,
+    "filename": "movie_night.jpg",
+    "title": "영화 감상",
+    "uploaded_at": "2024-09-15",
+    "thumbnail": "https://picsum.photos/300/200?random=6"
+  },
+  {
+    "id": 7,
+    "filename": "beach_walk.jpg",
+    "title": "해변 산책",
+    "uploaded_at": "2024-09-18",
+    "thumbnail": "https://picsum.photos/300/200?random=7"
+  },
+  {
+    "id": 8,
+    "filename": "holiday_dinner.jpg",
+    "title": "명절 저녁",
+    "uploaded_at": "2024-09-20",
+    "thumbnail": "https://picsum.photos/300/200?random=8"
+  }
+]
