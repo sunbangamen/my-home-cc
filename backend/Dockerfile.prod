@@ -1,0 +1,53 @@
+# Multi-stage build for production FastAPI backend
+FROM python:3.11-slim as builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements and install dependencies
+COPY requirements.dev.txt .
+RUN pip install --user --no-cache-dir -r requirements.dev.txt
+
+# Production stage
+FROM python:3.11-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --create-home --shell /bin/bash app
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /home/app/.local
+
+# Set up application directory
+WORKDIR /app
+RUN chown -R app:app /app
+
+# Create photos directory with proper permissions
+RUN mkdir -p /data/photos && chown -R app:app /data/photos
+
+# Switch to non-root user
+USER app
+
+# Add local packages to PATH
+ENV PATH=/home/app/.local/bin:$PATH
+
+# Copy application code
+COPY --chown=app:app . .
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/api/health || exit 1
+
+# Expose port
+EXPOSE 8000
+
+# Production command
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]

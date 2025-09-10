@@ -1,0 +1,149 @@
+version: "3.9"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: ${COMPOSE_PROJECT_NAME:-home-app-prod}-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-home}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-homepw}
+      POSTGRES_DB: ${POSTGRES_DB:-homepg}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - ${DB_VOLUME:-db_data_prod}:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-home} -d ${POSTGRES_DB:-homepg}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: ${COMPOSE_PROJECT_NAME:-home-app-prod}-backend
+    env_file:
+      - ./backend/.env.prod
+    volumes:
+      - ${PHOTOS_VOLUME:-photos_data_prod}:/data/photos
+    networks:
+      - app-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        - VITE_API_BASE_URL=https://${DOMAIN_NAME:-localhost}/api
+    container_name: ${COMPOSE_PROJECT_NAME:-home-app-prod}-frontend
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: ${NGINX_IMAGE:-nginx:1.25-alpine}
+    container_name: ${COMPOSE_PROJECT_NAME:-home-app-prod}-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf.template
+      - ${CERTS_VOLUME:-letsencrypt_prod}:/etc/letsencrypt
+      - ./nginx/certbot-www:/var/www/certbot
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost}
+    command: >
+      sh -c "
+      envsubst '$$DOMAIN_NAME' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf &&
+      nginx -g 'daemon off;'
+      "
+    networks:
+      - app-network
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+  # Certbot for Let's Encrypt
+  certbot:
+    image: certbot/certbot
+    container_name: ${COMPOSE_PROJECT_NAME:-home-app-prod}-certbot
+    volumes:
+      - ${CERTS_VOLUME:-letsencrypt_prod}:/etc/letsencrypt
+      - ./nginx/certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet --no-self-upgrade --post-hook \"nginx -s reload\"; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+        reservations:
+          memory: 32M
+
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  db_data_prod:
+    driver: local
+  photos_data_prod:
+    driver: local
+  letsencrypt_prod:
+    driver: local
