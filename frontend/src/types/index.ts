@@ -17,3 +17,32 @@ export interface Event {
   created_at: string;
   updated_at: string;
 }
+
+export interface Album {
+  id: number;
+  name: string;
+  description?: string;
+  cover_photo_id?: number;
+  created_at: string;
+  updated_at: string;
+  photo_count?: number;
+}
+
+export interface AlbumWithPhotos extends Album {
+  photos: Photo[];
+}
+
+export interface AlbumCreate {
+  name: string;
+  description?: string;
+}
+
+export interface AlbumUpdate {
+  name?: string;
+  description?: string;
+  cover_photo_id?: number;
+}
+
+export interface PhotoAlbumAssociation {
+  photo_ids: number[];
+}

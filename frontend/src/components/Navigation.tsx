@@ -10,6 +10,7 @@ const Navigation = () => {
   const navItems = [
     { path: '/', label: '홈', icon: '🏠' },
     { path: '/photos', label: '사진', icon: '📸' },
+    { path: '/albums', label: '앨범', icon: '📂' },
     { path: '/events', label: '일정', icon: '📅' }
   ];
 
