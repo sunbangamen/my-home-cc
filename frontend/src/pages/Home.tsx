@@ -2,41 +2,149 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="max-w-4xl mx-auto">
+    <div style={{ maxWidth: '1024px', margin: '0 auto' }}>
       {/* Hero Section */}
-      <div className="text-center py-12">
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
+      <div style={{ textAlign: 'center', padding: '48px 0' }}>
+        <h1 style={{ 
+          fontSize: '48px', 
+          fontWeight: 'bold', 
+          color: '#1f2937', 
+          marginBottom: '16px',
+          margin: 0
+        }}>
           우리집 홈페이지
         </h1>
-        <p className="text-xl text-gray-600 mb-8">
+        <p style={{ 
+          fontSize: '20px', 
+          color: '#6b7280', 
+          marginBottom: '32px',
+          margin: '16px 0 32px 0'
+        }}>
           가족의 소중한 추억과 일정을 함께 나눠요
         </p>
       </div>
 
       {/* Feature Cards */}
-      <div className="grid md:grid-cols-2 gap-8 mb-12">
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+        gap: '32px', 
+        marginBottom: '48px' 
+      }}>
         {/* Photos Card */}
         <Link
           to="/photos"
-          className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            overflow: 'hidden',
+            textDecoration: 'none',
+            color: 'inherit',
+            transition: 'box-shadow 0.3s ease',
+            display: 'block'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+          }}
         >
-          <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-            <span className="text-6xl text-white group-hover:scale-110 transition-transform duration-300">
-              📸
-            </span>
+          <div style={{ 
+            height: '192px', 
+            background: 'linear-gradient(to bottom right, #60a5fa, #2563eb)',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
+            <span style={{ fontSize: '64px', color: 'white' }}>📸</span>
           </div>
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <div style={{ padding: '24px' }}>
+            <h2 style={{ 
+              fontSize: '24px', 
+              fontWeight: 'bold', 
+              color: '#1f2937', 
+              marginBottom: '8px',
+              margin: 0
+            }}>
               가족 사진
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p style={{ 
+              color: '#6b7280', 
+              marginBottom: '16px',
+              margin: '8px 0 16px 0',
+              lineHeight: '1.5'
+            }}>
               소중한 순간들을 사진으로 저장하고 함께 감상해요
             </p>
-            <div className="flex items-center text-blue-600 font-medium">
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              color: '#2563eb', 
+              fontWeight: '500'
+            }}>
               사진 보러가기
-              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">
-                →
-              </span>
+              <span style={{ marginLeft: '8px' }}>→</span>
+            </div>
+          </div>
+        </Link>
+
+        {/* Albums Card */}
+        <Link
+          to="/albums"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            overflow: 'hidden',
+            textDecoration: 'none',
+            color: 'inherit',
+            transition: 'box-shadow 0.3s ease',
+            display: 'block'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+          }}
+        >
+          <div style={{ 
+            height: '192px', 
+            background: 'linear-gradient(to bottom right, #f59e0b, #d97706)',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
+            <span style={{ fontSize: '64px', color: 'white' }}>📂</span>
+          </div>
+          <div style={{ padding: '24px' }}>
+            <h2 style={{ 
+              fontSize: '24px', 
+              fontWeight: 'bold', 
+              color: '#1f2937', 
+              marginBottom: '8px',
+              margin: 0
+            }}>
+              사진 앨범
+            </h2>
+            <p style={{ 
+              color: '#6b7280', 
+              marginBottom: '16px',
+              margin: '8px 0 16px 0',
+              lineHeight: '1.5'
+            }}>
+              사진들을 앨범별로 정리하고 관리해요
+            </p>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              color: '#d97706', 
+              fontWeight: '500'
+            }}>
+              앨범 보러가기
+              <span style={{ marginLeft: '8px' }}>→</span>
             </div>
           </div>
         </Link>
@@ -44,43 +152,97 @@ const Home = () => {
         {/* Events Card */}
         <Link
           to="/events"
-          className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            overflow: 'hidden',
+            textDecoration: 'none',
+            color: 'inherit',
+            transition: 'box-shadow 0.3s ease',
+            display: 'block'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+          }}
         >
-          <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-            <span className="text-6xl text-white group-hover:scale-110 transition-transform duration-300">
-              📅
-            </span>
+          <div style={{ 
+            height: '192px', 
+            background: 'linear-gradient(to bottom right, #34d399, #059669)',
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center'
+          }}>
+            <span style={{ fontSize: '64px', color: 'white' }}>📅</span>
           </div>
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <div style={{ padding: '24px' }}>
+            <h2 style={{ 
+              fontSize: '24px', 
+              fontWeight: 'bold', 
+              color: '#1f2937', 
+              marginBottom: '8px',
+              margin: 0
+            }}>
               가족 일정
             </h2>
-            <p className="text-gray-600 mb-4">
+            <p style={{ 
+              color: '#6b7280', 
+              marginBottom: '16px',
+              margin: '8px 0 16px 0',
+              lineHeight: '1.5'
+            }}>
               중요한 날들과 가족 행사를 달력에서 확인해요
             </p>
-            <div className="flex items-center text-green-600 font-medium">
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              color: '#059669', 
+              fontWeight: '500'
+            }}>
               일정 보러가기
-              <span className="ml-2 group-hover:translate-x-1 transition-transform duration-300">
-                →
-              </span>
+              <span style={{ marginLeft: '8px' }}>→</span>
             </div>
           </div>
         </Link>
       </div>
 
       {/* Quick Stats */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
-          최근 활동
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        padding: '24px'
+      }}>
+        <h3 style={{
+          fontSize: '20px',
+          fontWeight: 'bold',
+          color: '#1f2937',
+          marginBottom: '16px',
+          textAlign: 'center',
+          margin: '0 0 16px 0'
+        }}>
+          현재 상태
         </h3>
-        <div className="grid grid-cols-2 gap-4 text-center">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '16px',
+          textAlign: 'center'
+        }}>
           <div>
-            <div className="text-2xl font-bold text-blue-600">8</div>
-            <div className="text-gray-600">저장된 사진</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#2563eb' }}>2</div>
+            <div style={{ color: '#6b7280', fontSize: '14px' }}>저장된 사진</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-green-600">7</div>
-            <div className="text-gray-600">예정된 일정</div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#d97706' }}>1</div>
+            <div style={{ color: '#6b7280', fontSize: '14px' }}>생성된 앨범</div>
+          </div>
+          <div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#059669' }}>0</div>
+            <div style={{ color: '#6b7280', fontSize: '14px' }}>예정된 일정</div>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import type { Event } from '../types';
+import type { Event } from '../types/index';
 import apiClient from '../api/client';
 import 'react-calendar/dist/Calendar.css';
 

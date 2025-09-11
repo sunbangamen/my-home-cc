@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 # Photo schemas
@@ -49,6 +49,53 @@ class EventResponse(EventBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+
+# Album schemas
+class AlbumBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+
+class AlbumCreate(AlbumBase):
+    pass
+
+
+class AlbumUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    cover_photo_id: Optional[int] = None
+
+
+class AlbumResponse(AlbumBase):
+    id: int
+    cover_photo_id: Optional[int] = None
+    created_at: datetime
+    updated_at: datetime
+    photo_count: Optional[int] = None
+    
+    class Config:
+        from_attributes = True
+
+
+class AlbumWithPhotos(AlbumResponse):
+    photos: List['PhotoResponse'] = []
+    
+    class Config:
+        from_attributes = True
+
+
+# Photo-Album association schemas
+class PhotoAlbumAssociation(BaseModel):
+    photo_ids: List[int]
+
+
+# Update PhotoResponse to include albums if needed
+class PhotoWithAlbums(PhotoResponse):
+    albums: List['AlbumResponse'] = []
     
     class Config:
         from_attributes = True

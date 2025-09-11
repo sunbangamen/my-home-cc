@@ -1,24 +1,9 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
+import type { 
+  Photo, Event, Album, AlbumWithPhotos, 
+  AlbumCreate, AlbumUpdate, PhotoAlbumAssociation 
+} from '../types/index';
 
-export interface Photo {
-  id: number;
-  filename: string;
-  original_name: string;
-  file_size: number;
-  mime_type: string;
-  uploaded_at: string;
-  description?: string;
-}
-
-export interface Event {
-  id: number;
-  title: string;
-  description?: string;
-  event_date: string;
-  is_all_day: boolean;
-  created_at: string;
-  updated_at: string;
-}
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 export interface CreateEvent {
   title: string;
@@ -111,7 +96,93 @@ class ApiClient {
     });
     return this.handleResponse(response);
   }
+
+  // Albums API
+  async getAlbums(): Promise<Album[]> {
+    const response = await fetch(`${this.baseUrl}/api/albums`);
+    return this.handleResponse(response);
+  }
+
+  async getAlbum(id: number): Promise<AlbumWithPhotos> {
+    const response = await fetch(`${this.baseUrl}/api/albums/${id}`);
+    return this.handleResponse(response);
+  }
+
+  async createAlbum(album: AlbumCreate): Promise<Album> {
+    const response = await fetch(`${this.baseUrl}/api/albums`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(album),
+    });
+    return this.handleResponse(response);
+  }
+
+  async updateAlbum(id: number, album: AlbumUpdate): Promise<Album> {
+    const response = await fetch(`${this.baseUrl}/api/albums/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(album),
+    });
+    return this.handleResponse(response);
+  }
+
+  async deleteAlbum(id: number): Promise<{ ok: boolean; message: string }> {
+    const response = await fetch(`${this.baseUrl}/api/albums/${id}`, {
+      method: 'DELETE',
+    });
+    return this.handleResponse(response);
+  }
+
+  // Photo-Album Association API
+  async addPhotosToAlbum(albumId: number, photoIds: number[]): Promise<{ ok: boolean; message: string; album_id: number }> {
+    const response = await fetch(`${this.baseUrl}/api/albums/${albumId}/photos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ photo_ids: photoIds }),
+    });
+    return this.handleResponse(response);
+  }
+
+  async removePhotosFromAlbum(albumId: number, photoIds: number[]): Promise<{ ok: boolean; message: string; album_id: number }> {
+    const response = await fetch(`${this.baseUrl}/api/albums/${albumId}/photos`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ photo_ids: photoIds }),
+    });
+    return this.handleResponse(response);
+  }
+
+  async getPhotoAlbums(photoId: number): Promise<Album[]> {
+    const response = await fetch(`${this.baseUrl}/api/photos/${photoId}/albums`);
+    return this.handleResponse(response);
+  }
 }
 
 export const apiClient = new ApiClient();
 export default apiClient;
+
+// Convenience exports for direct use (with proper this binding)
+export const healthCheck = apiClient.healthCheck.bind(apiClient);
+export const getPhotos = apiClient.getPhotos.bind(apiClient);
+export const uploadPhoto = apiClient.uploadPhoto.bind(apiClient);
+export const getEvents = apiClient.getEvents.bind(apiClient);
+export const getEvent = apiClient.getEvent.bind(apiClient);
+export const createEvent = apiClient.createEvent.bind(apiClient);
+export const updateEvent = apiClient.updateEvent.bind(apiClient);
+export const deleteEvent = apiClient.deleteEvent.bind(apiClient);
+export const getAlbums = apiClient.getAlbums.bind(apiClient);
+export const getAlbum = apiClient.getAlbum.bind(apiClient);
+export const createAlbum = apiClient.createAlbum.bind(apiClient);
+export const updateAlbum = apiClient.updateAlbum.bind(apiClient);
+export const deleteAlbum = apiClient.deleteAlbum.bind(apiClient);
+export const addPhotosToAlbum = apiClient.addPhotosToAlbum.bind(apiClient);
+export const removePhotosFromAlbum = apiClient.removePhotosFromAlbum.bind(apiClient);
+export const getPhotoAlbums = apiClient.getPhotoAlbums.bind(apiClient);
